@@ -3,6 +3,8 @@ import mongoose from 'mongoose';
 import dotenv from 'dotenv';
 import { ApolloServer } from 'apollo-server-express';
 import jwt from 'jsonwebtoken';
+import helmet from 'helmet';
+import cors from 'cors';
 
 dotenv.config();
 
@@ -16,6 +18,8 @@ const port = process.env.PORT || 4000;
 const DB_HOST = process.env.DB_HOST;
 
 const app = express();
+app.use(helmet());
+app.use(cors());
 
 // db.connect(DB_HOST);
 mongoose.connect(
