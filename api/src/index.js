@@ -5,13 +5,15 @@ import { ApolloServer } from 'apollo-server-express';
 import jwt from 'jsonwebtoken';
 import helmet from 'helmet';
 import cors from 'cors';
-
+import deepLimit from 'graphql-depth-limit';
+import { createComplexityLimitRule } from 'graphql-validation-complexity';
 dotenv.config();
 
 // // import db = require('./db');
 import { models } from './models/index.js';
 import { typeDefs } from './schema.js';
 import { resolvers } from './resolvers/index.js';
+import depthLimit from 'graphql-depth-limit';
 
 // Run our server on a port specified in our .env file or port 4000
 const port = process.env.PORT || 4000;
@@ -54,6 +56,7 @@ const getUser = token => {
 const server = new ApolloServer({
   typeDefs,
   resolvers,
+  validationRules: [depthLimit(5), createComplexityLimitRule(1000)],
   context: ({ req }) => {
     // get the user token from the headers
     const token = req.headers.authorization;
